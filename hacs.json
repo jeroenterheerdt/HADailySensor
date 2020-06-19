@@ -1,0 +1,5 @@
+{
+    "name": "Daily Sensor",
+    "render_readme": true,
+    "domains": ["sensor"]
+  }
