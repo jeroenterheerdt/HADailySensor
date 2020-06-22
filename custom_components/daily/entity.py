@@ -1,4 +1,4 @@
-"""SmartIrrigationEntity class."""
+"""Daily Sensor class."""
 from homeassistant.helpers.restore_state import RestoreEntity
 import logging
 
