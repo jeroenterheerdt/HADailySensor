@@ -1,4 +1,4 @@
-"""Sensor platform for Smart Irrigation."""
+"""Sensor platform for Daily Sensor."""
 import asyncio
 import logging
 from statistics import median, stdev, variance, StatisticsError
