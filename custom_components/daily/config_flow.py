@@ -1,4 +1,4 @@
-"""Config flow for Smart Irrigation integration."""
+"""Config flow for Daily Sensor integration."""
 from .const import (  # pylint: disable=unused-import
     DOMAIN,
     CONF_INPUT_SENSOR,
