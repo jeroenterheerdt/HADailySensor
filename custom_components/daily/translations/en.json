@@ -22,7 +22,6 @@
       "unknown": "[%key:common::config_flow::error::unknown%]"
     },
     "abort": {
-      "single_instance_allowed": "Only a single configuration of Smart Irrigation is allowed."
     }
   }
 }
