@@ -76,7 +76,7 @@ class DailySensor(DailySensorEntity):
     def _handle_reset(self, event: Event):
         """Receive the reset event."""
         # reset the sensor
-        self._state = 0.0
+        self._state = None
         self._values = []
         self.hass.add_job(self.async_update_ha_state)
 
