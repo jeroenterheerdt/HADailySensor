@@ -21,6 +21,7 @@ from .const import (
     EVENT_RESET,
     EVENT_UPDATE,
     SERVICE_RESET,
+    SERVICE_UPDATE,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -72,6 +73,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     # register services
     hass.services.async_register(
         DOMAIN, f"{name}_{SERVICE_RESET}", coordinator.handle_reset,
+    )
+    hass.services.async_register(
+        DOMAIN, f"{name}_{SERVICE_UPDATE}", coordinator.handle_update,
     )
     return True
 
@@ -132,22 +136,26 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         """Register an entity."""
         self.entities[thetype] = entity
 
-    def fire_reset_event(self):
-        """Fire an event so the sensor can reset itself."""
-        event_to_fire = f"{self.name}_{EVENT_RESET}"
+    def fire_event(self, event):
+        """Fire an event."""
+        event_to_fire = f"{self.name}_{event}"
         self.hass.bus.fire(event_to_fire)
 
     def handle_reset(self, call):
         """Hande the reset service call."""
-        self.fire_reset_event()
+        self.fire_event(EVENT_RESET)
+
+    def handle_update(self, call):
+        """Handle the update service call."""
+        self.fire_event(EVENT_UPDATE)
 
     async def _async_reset(self, *args):
         _LOGGER.info("Resetting daily sensor {}!".format(self.name))
-        self.fire_reset_event()
+        self.fire_event(EVENT_RESET)
 
     async def _async_update_data(self):
         """Update data."""
         _LOGGER.info("Updating Daily Sensor {}".format(self.name))
         # fire an event so the sensor can update itself.
-        event_to_fire = f"{self.name}_{EVENT_UPDATE}"
-        self.hass.bus.fire(event_to_fire)
+        self.fire_event(EVENT_UPDATE)
+
