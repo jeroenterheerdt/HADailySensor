@@ -109,7 +109,7 @@ class DailySensor(DailySensorEntity):
                         self._state = the_val
                 elif self.coordinator.operation == CONF_MEAN:
                     self._values.append(the_val)
-                    self._state = (sum(self._values) * 1.0) / len(self._values)
+                    self._state = round((sum(self._values) * 1.0) / len(self._values), 1)
                 elif self.coordinator.operation == CONF_MEDIAN:
                     self._values.append(the_val)
                     self._state = median(self._values)
