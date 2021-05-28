@@ -124,14 +124,14 @@ class DailySensor(DailySensorEntity):
                         pass
                 self.hass.add_job(self.async_update_ha_state)
         except ValueError:
-            _LOGGER.error("unable to convert to float.")
+            _LOGGER.error("unable to convert to float. Please check the source sensor ({}) is available.".format(self.coordinator.input_sensor))
 
     def convert_to_float(self, float_value):
         """Convert to Float."""
         try:
             return float(float_value)
         except ValueError:
-            _LOGGER.error("unable to convert {} to float.".format(float_value))
+            _LOGGER.error("unable to convert {} to float. Please check the source sensor ({}) is available.".format(float_value, self.coordinator.input_sensor))
             raise ValueError
 
     @property
