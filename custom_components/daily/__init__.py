@@ -38,6 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
     name = entry.data.get(CONF_NAME)
+    name_no_spaces_but_underscores = name.replace(" ","_")
     input_sensor = entry.data.get(CONF_INPUT_SENSOR)
     operation = entry.data.get(CONF_OPERATION)
     interval = entry.data.get(CONF_INTERVAL)
@@ -72,10 +73,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     # register services
     hass.services.async_register(
-        DOMAIN, f"{name}_{SERVICE_RESET}", coordinator.handle_reset,
+        DOMAIN, f"{name_no_spaces_but_underscores}_{SERVICE_RESET}", coordinator.handle_reset,
     )
     hass.services.async_register(
-        DOMAIN, f"{name}_{SERVICE_UPDATE}", coordinator.handle_update,
+        DOMAIN, f"{name_no_spaces_but_underscores}_{SERVICE_UPDATE}", coordinator.handle_update,
     )
     return True
 
