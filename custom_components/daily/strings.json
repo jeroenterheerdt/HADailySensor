@@ -10,7 +10,8 @@
           "sensor": "The entity that will provide input to the daily sensor",
           "operation": "The operation to be applied to the sensor",
           "unit_of_measurement": "The unit of measurement",
-          "interval": "Refresh interval in minutes"
+          "interval": "Refresh interval in minutes",
+          "auto_reset": "Automatically reset at 00:00 ?"
         }
       }
     },

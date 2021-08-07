@@ -23,6 +23,7 @@ from .const import (  # pylint: disable=unused-import
     CONF_OPERATION,
     CONF_INTERVAL,
     CONF_UNIT_OF_MEASUREMENT,
+    CONF_AUTO_RESET,
 )
 from .entity import DailySensorEntity
 
@@ -157,6 +158,7 @@ class DailySensor(DailySensorEntity):
             CONF_OPERATION: self.coordinator.operation,
             CONF_INTERVAL: self.coordinator.interval,
             CONF_UNIT_OF_MEASUREMENT: self.unit_of_measurement,
+            CONF_AUTO_RESET: self.coordinator.auto_reset,
         }
 
     @property

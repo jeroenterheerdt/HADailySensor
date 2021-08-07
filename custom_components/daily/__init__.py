@@ -18,6 +18,7 @@ from .const import (
     CONF_OPERATION,
     CONF_INTERVAL,
     CONF_UNIT_OF_MEASUREMENT,
+    CONF_AUTO_RESET,
     EVENT_RESET,
     EVENT_UPDATE,
     SERVICE_RESET,
@@ -43,6 +44,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     operation = entry.data.get(CONF_OPERATION)
     interval = entry.data.get(CONF_INTERVAL)
     unit_of_measurement = entry.data.get(CONF_UNIT_OF_MEASUREMENT)
+    auto_reset = entry.data.get(CONF_AUTO_RESET)
 
     # set up coordinator
     coordinator = DailySensorUpdateCoordinator(
@@ -52,6 +54,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         operation=operation,
         interval=interval,
         unit_of_measurement=unit_of_measurement,
+        auto_reset=auto_reset,
     )
 
     await coordinator.async_refresh()
@@ -111,7 +114,7 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
     """Class to store settings."""
 
     def __init__(
-        self, hass, name, input_sensor, operation, interval, unit_of_measurement
+        self, hass, name, input_sensor, operation, interval, unit_of_measurement, auto_reset
     ):
         """Initialize."""
         self.name = name
@@ -119,6 +122,7 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         self.operation = operation
         self.interval = int(interval)
         self.unit_of_measurement = unit_of_measurement
+        self.auto_reset = auto_reset
         self.hass = hass
         self.entities = {}
         self.platforms = []
@@ -128,9 +132,10 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(hass, _LOGGER, name=name, update_interval=SCAN_INTERVAL)
 
         # reset happens at midnight
-        async_track_time_change(
-            hass, self._async_reset, hour=0, minute=0, second=0,
-        )
+        if self.auto_reset:
+            async_track_time_change(
+                hass, self._async_reset, hour=0, minute=0, second=0,
+            )
         self.entry_setup_completed = True
 
     def register_entity(self, thetype, entity):
