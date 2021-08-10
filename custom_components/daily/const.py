@@ -20,6 +20,7 @@ CONF_OPERATION = "operation"
 CONF_NAME = "name"
 CONF_INTERVAL = "interval"
 CONF_UNIT_OF_MEASUREMENT = "unit_of_measurement"
+CONF_AUTO_RESET = "auto_reset"
 
 # Operations
 CONF_MAX = "max"
@@ -41,7 +42,7 @@ VALID_OPERATIONS = [
 
 # Defaults
 DEFAULT_INTERVAL = 30  # minutes
-
+DEFAULT_AUTO_RESET = True
 # Services
 SERVICE_RESET = "reset"
 SERVICE_UPDATE = "update"
