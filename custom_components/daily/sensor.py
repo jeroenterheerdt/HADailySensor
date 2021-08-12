@@ -70,7 +70,11 @@ class DailySensor(DailySensorEntity):
         )
 
         state = await self.async_get_last_state()
-        if state is not None and state.state != "unavailable":
+        if (
+            state is not None
+            and state.state != "unavailable"
+            and state.state != "unknown"
+        ):
             self._state = float(state.state)
 
     @callback
@@ -110,7 +114,9 @@ class DailySensor(DailySensorEntity):
                         self._state = the_val
                 elif self.coordinator.operation == CONF_MEAN:
                     self._values.append(the_val)
-                    self._state = round((sum(self._values) * 1.0) / len(self._values), 1)
+                    self._state = round(
+                        (sum(self._values) * 1.0) / len(self._values), 1
+                    )
                 elif self.coordinator.operation == CONF_MEDIAN:
                     self._values.append(the_val)
                     self._state = median(self._values)
@@ -125,14 +131,22 @@ class DailySensor(DailySensorEntity):
                         pass
                 self.hass.add_job(self.async_update_ha_state)
         except ValueError:
-            _LOGGER.error("unable to convert to float. Please check the source sensor ({}) is available.".format(self.coordinator.input_sensor))
+            _LOGGER.error(
+                "unable to convert to float. Please check the source sensor ({}) is available.".format(
+                    self.coordinator.input_sensor
+                )
+            )
 
     def convert_to_float(self, float_value):
         """Convert to Float."""
         try:
             return float(float_value)
         except ValueError:
-            _LOGGER.error("unable to convert {} to float. Please check the source sensor ({}) is available.".format(float_value, self.coordinator.input_sensor))
+            _LOGGER.error(
+                "unable to convert {} to float. Please check the source sensor ({}) is available.".format(
+                    float_value, self.coordinator.input_sensor
+                )
+            )
             raise ValueError
 
     @property

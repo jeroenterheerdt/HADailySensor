@@ -39,7 +39,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
     name = entry.data.get(CONF_NAME)
-    name_no_spaces_but_underscores = name.replace(" ","_")
+    name_no_spaces_but_underscores = name.replace(" ", "_")
     input_sensor = entry.data.get(CONF_INPUT_SENSOR)
     operation = entry.data.get(CONF_OPERATION)
     interval = entry.data.get(CONF_INTERVAL)
@@ -76,10 +76,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     # register services
     hass.services.async_register(
-        DOMAIN, f"{name_no_spaces_but_underscores}_{SERVICE_RESET}", coordinator.handle_reset,
+        DOMAIN,
+        f"{name_no_spaces_but_underscores}_{SERVICE_RESET}",
+        coordinator.handle_reset,
     )
     hass.services.async_register(
-        DOMAIN, f"{name_no_spaces_but_underscores}_{SERVICE_UPDATE}", coordinator.handle_update,
+        DOMAIN,
+        f"{name_no_spaces_but_underscores}_{SERVICE_UPDATE}",
+        coordinator.handle_update,
     )
     return True
 
@@ -114,7 +118,14 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
     """Class to store settings."""
 
     def __init__(
-        self, hass, name, input_sensor, operation, interval, unit_of_measurement, auto_reset
+        self,
+        hass,
+        name,
+        input_sensor,
+        operation,
+        interval,
+        unit_of_measurement,
+        auto_reset,
     ):
         """Initialize."""
         self.name = name
@@ -132,10 +143,16 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(hass, _LOGGER, name=name, update_interval=SCAN_INTERVAL)
 
         # reset happens at midnight
+        _LOGGER.info("auto_reset: {0}".format(self.auto_reset))
         if self.auto_reset:
             async_track_time_change(
-                hass, self._async_reset, hour=0, minute=0, second=0,
+                hass,
+                self._async_reset,
+                hour=0,
+                minute=0,
+                second=0,
             )
+            _LOGGER.info("registered for time change.")
         self.entry_setup_completed = True
 
     def register_entity(self, thetype, entity):
@@ -164,4 +181,3 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         _LOGGER.info("Updating Daily Sensor {}".format(self.name))
         # fire an event so the sensor can update itself.
         self.fire_event(EVENT_UPDATE)
-
