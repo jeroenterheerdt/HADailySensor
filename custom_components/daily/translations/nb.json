@@ -10,7 +10,8 @@
           "sensor": "Enheten som vil gi innspill til den daglige sensoren",
           "operation": "Operasjonen som skal brukes på sensoren",
           "unit_of_measurement": "Måleenheten",
-          "interval": "Oppdater intervall i minutter"
+          "interval": "Oppdater intervall i minutter",
+          "auto_reset": "Återställs automatiskt vid midnatt?"
         }
       }
     },

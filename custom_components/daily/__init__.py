@@ -18,6 +18,7 @@ from .const import (
     CONF_OPERATION,
     CONF_INTERVAL,
     CONF_UNIT_OF_MEASUREMENT,
+    CONF_AUTO_RESET,
     EVENT_RESET,
     EVENT_UPDATE,
     SERVICE_RESET,
@@ -38,11 +39,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
     name = entry.data.get(CONF_NAME)
-    name_no_spaces_but_underscores = name.replace(" ","_")
+    name_no_spaces_but_underscores = name.replace(" ", "_")
     input_sensor = entry.data.get(CONF_INPUT_SENSOR)
     operation = entry.data.get(CONF_OPERATION)
     interval = entry.data.get(CONF_INTERVAL)
     unit_of_measurement = entry.data.get(CONF_UNIT_OF_MEASUREMENT)
+    auto_reset = entry.data.get(CONF_AUTO_RESET)
 
     # set up coordinator
     coordinator = DailySensorUpdateCoordinator(
@@ -52,6 +54,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         operation=operation,
         interval=interval,
         unit_of_measurement=unit_of_measurement,
+        auto_reset=auto_reset,
     )
 
     await coordinator.async_refresh()
@@ -73,10 +76,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     # register services
     hass.services.async_register(
-        DOMAIN, f"{name_no_spaces_but_underscores}_{SERVICE_RESET}", coordinator.handle_reset,
+        DOMAIN,
+        f"{name_no_spaces_but_underscores}_{SERVICE_RESET}",
+        coordinator.handle_reset,
     )
     hass.services.async_register(
-        DOMAIN, f"{name_no_spaces_but_underscores}_{SERVICE_UPDATE}", coordinator.handle_update,
+        DOMAIN,
+        f"{name_no_spaces_but_underscores}_{SERVICE_UPDATE}",
+        coordinator.handle_update,
     )
     return True
 
@@ -111,7 +118,14 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
     """Class to store settings."""
 
     def __init__(
-        self, hass, name, input_sensor, operation, interval, unit_of_measurement
+        self,
+        hass,
+        name,
+        input_sensor,
+        operation,
+        interval,
+        unit_of_measurement,
+        auto_reset,
     ):
         """Initialize."""
         self.name = name
@@ -119,6 +133,7 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         self.operation = operation
         self.interval = int(interval)
         self.unit_of_measurement = unit_of_measurement
+        self.auto_reset = auto_reset
         self.hass = hass
         self.entities = {}
         self.platforms = []
@@ -128,9 +143,16 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(hass, _LOGGER, name=name, update_interval=SCAN_INTERVAL)
 
         # reset happens at midnight
-        async_track_time_change(
-            hass, self._async_reset, hour=0, minute=0, second=0,
-        )
+        _LOGGER.info("auto_reset: {0}".format(self.auto_reset))
+        if self.auto_reset:
+            async_track_time_change(
+                hass,
+                self._async_reset,
+                hour=0,
+                minute=0,
+                second=0,
+            )
+            _LOGGER.info("registered for time change.")
         self.entry_setup_completed = True
 
     def register_entity(self, thetype, entity):
@@ -159,4 +181,3 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         _LOGGER.info("Updating Daily Sensor {}".format(self.name))
         # fire an event so the sensor can update itself.
         self.fire_event(EVENT_UPDATE)
-

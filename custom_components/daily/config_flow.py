@@ -6,9 +6,11 @@ from .const import (  # pylint: disable=unused-import
     CONF_NAME,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_INTERVAL,
+    CONF_AUTO_RESET,
     NAME,
     VALID_OPERATIONS,
     DEFAULT_INTERVAL,
+    DEFAULT_AUTO_RESET,
 )
 
 import logging
@@ -32,6 +34,7 @@ class DailySensorConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         self._input_sensor = ""
         self._unit_of_measurement = "unknown"
         self._errors = {}
+        self._auto_reset = DEFAULT_AUTO_RESET
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""
@@ -56,6 +59,7 @@ class DailySensorConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 ):
                     raise IntervalNotValid
                 self._name = user_input[CONF_NAME]
+                self._auto_reset = user_input[CONF_AUTO_RESET]
 
                 return self.async_create_entry(title=self._name, data=user_input)
 
@@ -96,6 +100,7 @@ class DailySensorConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_OPERATION): vol.In(VALID_OPERATIONS),
                     vol.Required(CONF_UNIT_OF_MEASUREMENT): str,
                     vol.Required(CONF_INTERVAL, default=DEFAULT_INTERVAL): int,
+                    vol.Required(CONF_AUTO_RESET, default=DEFAULT_AUTO_RESET): bool,
                 }
             ),
             errors=self._errors,
