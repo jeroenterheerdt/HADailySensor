@@ -19,6 +19,7 @@ from .const import (
     CONF_INTERVAL,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_AUTO_RESET,
+    DEFAULT_AUTO_RESET,
     EVENT_RESET,
     EVENT_UPDATE,
     SERVICE_RESET,
@@ -44,7 +45,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     operation = entry.data.get(CONF_OPERATION)
     interval = entry.data.get(CONF_INTERVAL)
     unit_of_measurement = entry.data.get(CONF_UNIT_OF_MEASUREMENT)
-    auto_reset = entry.data.get(CONF_AUTO_RESET)
+    auto_reset = entry.data.get(CONF_AUTO_RESET, DEFAULT_AUTO_RESET)
 
     # set up coordinator
     coordinator = DailySensorUpdateCoordinator(
