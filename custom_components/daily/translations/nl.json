@@ -1,25 +1,25 @@
 {
-  "title": "Daily Sensor",
+  "title": "Dagelijkse Sensor",
   "config": {
     "step": {
       "user": {
-        "title": "Daily Sensor",
-        "description": "If you need help with the configuration, please see https://github.com/jeroenterheerdt/HADailySensor",
+        "title": "Dagelijkse Sensor",
+        "description": "Voor hulp bij de configuratie, ga naar https://github.com/jeroenterheerdt/HADailySensor",
         "data": {
-          "name": "Unique name of the instance",
-          "sensor": "The entity that will provide input to the daily sensor",
-          "operation": "The operation to be applied to the sensor",
-          "unit_of_measurement": "The unit of measurement",
-          "interval": "Refresh interval in minutes",
-          "auto_reset": "Automatically reset at 00:00"
+          "name": "Unieke naam van deze instantie",
+          "sensor": "De entity die de input voor de dagelijkse sensor geeft",
+          "operation": "De operatie die op de dagelijkse sensor wordt gedaan",
+          "unit_of_measurement": "De eenheid van de sensor",
+          "interval": "Ververs interval in minuten",
+          "auto_reset": "Automatisch reset om 00:00"
         }
       }
     },
     "error": {
-      "intervalnotvalid": "Specified interval is not valid. Needs to be >0 minutes.",
-      "name": "Specify an unique name for this instance.",
-      "operationnotfound": "Specify a supported operation",
-      "sensornotfound": "One or more of the sensors specified do not exist",
+      "intervalnotvalid": "Het gegeven interval is incorrect. Het moet >0 minuten zijn.",
+      "name": "Geef een unieke naam voor deze instantie.",
+      "operationnotfound": "Kies een operatie die wordt ondersteund.",
+      "sensornotfound": "Een of meer van de gegeven sensors bestaan niet.",
       "unknown": "[%key:common::config_flow::error::unknown%]"
     },
     "abort": {
