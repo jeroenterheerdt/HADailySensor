@@ -1,6 +1,6 @@
 """The Daily Sensor integration."""
 import asyncio
-from datetime import timedelta
+from datetime import timedelta, datetime
 import logging
 import weakref
 
@@ -19,6 +19,7 @@ from .const import (
     CONF_INTERVAL,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_AUTO_RESET,
+    ATTR_DATETIME_OF_OCCURRENCE,
     DEFAULT_AUTO_RESET,
     EVENT_RESET,
     EVENT_UPDATE,
@@ -142,6 +143,10 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
 
         SCAN_INTERVAL = timedelta(minutes=self.interval)
         super().__init__(hass, _LOGGER, name=name, update_interval=SCAN_INTERVAL)
+
+        self._attributes = {
+            ATTR_DATETIME_OF_OCCURRENCE: datetime.now(),
+        }
 
         # reset happens at midnight
         _LOGGER.info("auto_reset: {0}".format(self.auto_reset))

@@ -24,6 +24,7 @@ from .const import (  # pylint: disable=unused-import
     CONF_INTERVAL,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_AUTO_RESET,
+    ATTR_DATETIME_OF_OCCURRENCE,
 )
 from .entity import DailySensorEntity
 
