@@ -1,6 +1,6 @@
 """The Daily Sensor integration."""
 import asyncio
-from datetime import timedelta, datetime
+from datetime import timedelta
 import logging
 import weakref
 
@@ -19,7 +19,6 @@ from .const import (
     CONF_INTERVAL,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_AUTO_RESET,
-    ATTR_DATETIME_OF_OCCURRENCE,
     DEFAULT_AUTO_RESET,
     EVENT_RESET,
     EVENT_UPDATE,
