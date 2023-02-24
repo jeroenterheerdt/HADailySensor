@@ -29,11 +29,6 @@ class DailySensorEntity(RestoreEntity):
         """Return a unique ID to use for this entity."""
         return self.config_entry.entry_id
 
-    @property
-    def extra_state_attributes(self):
-        """Return entity specific state attributes."""
-        return self._attributes
-
     async def async_added_to_hass(self):
         """Connect to dispatcher listening for entity data notifications."""
         self.async_on_remove(

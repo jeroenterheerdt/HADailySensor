@@ -144,10 +144,6 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         SCAN_INTERVAL = timedelta(minutes=self.interval)
         super().__init__(hass, _LOGGER, name=name, update_interval=SCAN_INTERVAL)
 
-        self._attributes = {
-            ATTR_DATETIME_OF_OCCURRENCE: datetime.now(),
-        }
-
         # reset happens at midnight
         _LOGGER.info("auto_reset: {0}".format(self.auto_reset))
         if self.auto_reset:
