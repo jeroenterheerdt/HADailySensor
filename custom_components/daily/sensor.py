@@ -83,7 +83,7 @@ class DailySensor(DailySensorEntity):
         # reset the sensor
         self._state = None
         self._values = []
-        self.hass.add_job(self.async_update_ha_state)
+        self.hass.add_job(self.async_write_ha_state)
 
     @callback
     def _handle_update(self, event: Event):
@@ -129,7 +129,7 @@ class DailySensor(DailySensorEntity):
                         self._state = variance(self._values)
                     except StatisticsError:
                         pass
-                self.hass.add_job(self.async_update_ha_state)
+                self.hass.add_job(self.async_write_ha_state)
         except ValueError:
             _LOGGER.error(
                 "unable to convert to float. Please check the source sensor ({}) is available.".format(
