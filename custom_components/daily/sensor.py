@@ -49,7 +49,6 @@ class DailySensor(DailySensorEntity):
         self._values = []
         self._occurrence = None
 
-    @asyncio.coroutine
     async def async_added_to_hass(self):
         """Complete the initialization."""
         await super().async_added_to_hass()
@@ -87,7 +86,7 @@ class DailySensor(DailySensorEntity):
         self._state = None
         self._occurrence = None
         self._values = []
-        self.hass.add_job(self.async_update_ha_state)
+        self.hass.add_job(self.async_write_ha_state)
 
     @callback
     def _handle_update(self, event: Event):
