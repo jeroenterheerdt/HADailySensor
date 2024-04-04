@@ -10,19 +10,18 @@
           "sensor": "Entita, ktorá bude poskytovať vstup pre denný senzor",
           "operation": "Operácia, ktorá sa má použiť na snímač",
           "unit_of_measurement": "Jednotka merania",
-          "interval": "Interval obnovovania v minútach",
+          "interval": "Interval obnovovania v sekund",
           "auto_reset": "Automaticky resetovať o 00:00"
         }
       }
     },
     "error": {
-      "intervalnotvalid": "Zadaný interval nie je platný. Musí byť > 0 minút.",
+      "intervalnotvalid": "Zadaný interval nie je platný. Musí byť > 0 sekund.",
       "name": "Zadajte jedinečný názov pre túto inštanciu.",
       "operationnotfound": "Zadajte podporovanú operáciu",
       "sensornotfound": "Jeden alebo viacero špecifikovaných snímačov neexistuje",
       "unknown": "[%key:common::config_flow::error::unknown%]"
     },
-    "abort": {
-    }
+    "abort": {}
   }
 }
