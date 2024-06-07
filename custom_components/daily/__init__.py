@@ -1,4 +1,5 @@
 """The Daily Sensor integration."""
+
 import asyncio
 from datetime import timedelta
 import logging
@@ -59,15 +60,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     if CONF_INPUT_SENSOR in entry.options and entry.options.get(
         CONF_INPUT_SENSOR
     ) != entry.data.get(CONF_INPUT_SENSOR):
-        input_sensor = hass.data[DOMAIN][entry.entry_id][
-            CONF_INPUT_SENSOR
-        ] = entry.options.get(CONF_INPUT_SENSOR)
+        input_sensor = hass.data[DOMAIN][entry.entry_id][CONF_INPUT_SENSOR] = (
+            entry.options.get(CONF_INPUT_SENSOR)
+        )
     if CONF_AUTO_RESET in entry.options and entry.options.get(
         CONF_AUTO_RESET
     ) != entry.data.get(CONF_AUTO_RESET):
-        auto_reset = hass.data[DOMAIN][entry.entry_id][
-            CONF_AUTO_RESET
-        ] = entry.options.get(CONF_AUTO_RESET)
+        auto_reset = hass.data[DOMAIN][entry.entry_id][CONF_AUTO_RESET] = (
+            entry.options.get(CONF_AUTO_RESET)
+        )
     if CONF_INTERVAL in entry.options and entry.options.get(
         CONF_INTERVAL
     ) != entry.data.get(CONF_INTERVAL):
@@ -77,9 +78,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     if CONF_OPERATION in entry.options and entry.options.get(
         CONF_OPERATION
     ) != entry.data.get(CONF_OPERATION):
-        operation = hass.data[DOMAIN][entry.entry_id][
-            CONF_OPERATION
-        ] = entry.options.get(CONF_OPERATION)
+        operation = hass.data[DOMAIN][entry.entry_id][CONF_OPERATION] = (
+            entry.options.get(CONF_OPERATION)
+        )
     if CONF_UNIT_OF_MEASUREMENT in entry.options and entry.options.get(
         CONF_UNIT_OF_MEASUREMENT
     ) != entry.data.get(CONF_UNIT_OF_MEASUREMENT):
@@ -102,6 +103,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     if not coordinator.last_update_success:
         raise ConfigEntryNotReady
 
+    hass.data[DOMAIN][entry.entry_id][COORDINATOR] = coordinator
+
     for platform in PLATFORMS:
         coordinator.platforms.append(platform)
         hass.async_create_task(
@@ -112,7 +115,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     # if weakref.ref(async_reload_entry) not in entry.update_listeners:
     #    entry.add_update_listener(async_reload_entry)
 
-    hass.data[DOMAIN][entry.entry_id][COORDINATOR] = coordinator
     # register services
     hass.services.async_register(
         DOMAIN,
@@ -140,18 +142,18 @@ async def options_update_listener(hass, config_entry):
     hass.data[DOMAIN][config_entry.entry_id][CONF_INTERVAL] = config_entry.options.get(
         CONF_INTERVAL
     )
-    hass.data[DOMAIN][config_entry.entry_id][
-        CONF_INPUT_SENSOR
-    ] = config_entry.options.get(CONF_INPUT_SENSOR)
-    hass.data[DOMAIN][config_entry.entry_id][
-        CONF_AUTO_RESET
-    ] = config_entry.options.get(CONF_AUTO_RESET)
+    hass.data[DOMAIN][config_entry.entry_id][CONF_INPUT_SENSOR] = (
+        config_entry.options.get(CONF_INPUT_SENSOR)
+    )
+    hass.data[DOMAIN][config_entry.entry_id][CONF_AUTO_RESET] = (
+        config_entry.options.get(CONF_AUTO_RESET)
+    )
     hass.data[DOMAIN][config_entry.entry_id][CONF_OPERATION] = config_entry.options.get(
         CONF_OPERATION
     )
-    hass.data[DOMAIN][config_entry.entry_id][
-        CONF_UNIT_OF_MEASUREMENT
-    ] = config_entry.options.get(CONF_UNIT_OF_MEASUREMENT)
+    hass.data[DOMAIN][config_entry.entry_id][CONF_UNIT_OF_MEASUREMENT] = (
+        config_entry.options.get(CONF_UNIT_OF_MEASUREMENT)
+    )
     await hass.config_entries.async_reload(config_entry.entry_id)
 
 
