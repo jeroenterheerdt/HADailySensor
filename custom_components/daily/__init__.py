@@ -3,32 +3,35 @@
 import asyncio
 from datetime import timedelta
 import logging
-import weakref
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.event import async_track_time_change
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+
 from .const import (
-    DOMAIN,
-    PLATFORMS,
-    STARTUP_MESSAGE,
-    CONF_NAME,
-    CONF_INPUT_SENSOR,
-    CONF_OPERATION,
-    CONF_INTERVAL,
-    CONF_UNIT_OF_MEASUREMENT,
     CONF_AUTO_RESET,
+    CONF_INPUT_SENSOR,
+    CONF_INTERVAL,
+    CONF_NAME,
+    CONF_OPERATION,
+    CONF_UNIT_OF_MEASUREMENT,
+    COORDINATOR,
     DEFAULT_AUTO_RESET,
+    DOMAIN,
     EVENT_RESET,
     EVENT_UPDATE,
+    PLATFORMS,
     SERVICE_RESET,
     SERVICE_UPDATE,
-    COORDINATOR,
+    STARTUP_MESSAGE,
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
 async def async_setup(hass: HomeAssistant, config: dict):
