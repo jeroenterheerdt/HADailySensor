@@ -1,15 +1,15 @@
 {
   "domain": "daily",
   "name": "Daily Sensor",
+  "codeowners": ["@jeroenterheerdt"],
   "config_flow": true,
+  "dependencies": [],
   "documentation": "https://github.com/jeroenterheerdt/HADailySensor",
+  "homekit": {},
+  "iot_class": "local_push",
   "issue_tracker": "https://github.com/jeroenterheerdt/HADailySensor/issues",
   "requirements": [],
   "ssdp": [],
-  "zeroconf": [],
-  "homekit": {},
-  "dependencies": [],
-  "iot_class": "local_push",
-  "codeowners": ["@jeroenterheerdt"],
-  "version": "2024.6.0"
+  "version": "2024.6.0",
+  "zeroconf": []
 }
