@@ -16,7 +16,7 @@ PLATFORMS = [SENSOR]
 
 # Localization
 LANGUAGE_FILES_DIR = "translations"
-SUPPORTED_LANGUAGES = ["da", "el", "en", "es", "fr", "nb", "nl", "sk"]
+SUPPORTED_LANGUAGES = ["da", "el", "en", "es", "fr", "nb", "nl", "sk", "sl"]
 
 # Config
 CONF_INPUT_SENSOR = "sensor"
