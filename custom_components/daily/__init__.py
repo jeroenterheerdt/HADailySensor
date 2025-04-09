@@ -160,8 +160,20 @@ async def options_update_listener(hass, config_entry):
     hass.data[DOMAIN][config_entry.entry_id][CONF_UNIT_OF_MEASUREMENT] = (
         config_entry.options.get(CONF_UNIT_OF_MEASUREMENT)
     )
-    await hass.config_entries.async_reload(config_entry.entry_id)
 
+    # Instead of reloading the entire config entry, directly update the coordinator's interval here.
+    coordinator = hass.data[DOMAIN][config_entry.entry_id][COORDINATOR]
+    new_interval = config_entry.options.get(CONF_INTERVAL)
+    if new_interval is not None:
+        _LOGGER.info(
+            "Changing update interval (no reload) to %s seconds for entry '%s'.",
+            new_interval,
+            config_entry.entry_id,
+        )
+        coordinator.interval = int(new_interval)
+        coordinator.update_interval = timedelta(seconds=coordinator.interval)
+        # Immediately trigger a refresh so the user sees the changes right away.
+        await coordinator.async_request_refresh()
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Handle removal of an entry."""
