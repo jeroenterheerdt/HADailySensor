@@ -1,0 +1,61 @@
+{
+  "title": "Sensor diari",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Sensor diari",
+        "description": "Si necessiteu ajuda amb la configuració, consulteu https://github.com/jeroenterheerdt/HADailySensor",
+        "data": {
+          "name": "Nom únic de la instància",
+          "sensor": "L'entitat que proporcionarà l'entrada al sensor diari",
+          "operation": "L'operació que s'aplicarà al sensor",
+          "unit_of_measurement": "La unitat de mesura",
+          "interval": "Interval d'actualització en segons",
+          "auto_reset": "Restablir automàticament a les 00:00"
+        }
+      }
+    },
+    "error": {
+      "intervalnotvalid": "L'interval especificat no és vàlid. Ha de ser >0 segons.",
+      "name": "Especifiqueu un nom únic per a aquesta instància.",
+      "operationnotfound": "Especifiqueu una operació admesa",
+      "sensornotfound": "Un o més dels sensors especificats no existeixen",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {}
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sensor diari",
+        "description": "Si necessiteu ajuda amb la configuració, consulteu https://github.com/jeroenterheerdt/HADailySensor",
+        "data": {
+          "name": "Nom únic de la instància",
+          "sensor": "L'entitat que proporcionarà l'entrada al sensor diari",
+          "operation": "L'operació que s'aplicarà al sensor",
+          "unit_of_measurement": "La unitat de mesura",
+          "interval": "Interval d'actualització en segons",
+          "auto_reset": "Restablir automàticament a les 00:00 ?"
+        }
+      }
+    },
+    "error": {
+      "intervalnotvalid": "L'interval especificat no és vàlid. Ha de ser >0 segons.",
+      "name": "Especifiqueu un nom únic per a aquesta instància.",
+      "operationnotfound": "Especifiqueu una operació admesa",
+      "sensornotfound": "Un o més dels sensors especificats no existeixen",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {}
+  },
+  "services": {
+    "reset": {
+      "name": "Restablir",
+      "description": "Restablir el valor a 'desconegut'"
+    },
+    "update": {
+      "name": "Actualitzar",
+      "description": "Actualitzar el sensor diari"
+    }
+  }
+}
