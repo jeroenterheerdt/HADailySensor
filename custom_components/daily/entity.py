@@ -1,5 +1,6 @@
 """Daily Sensor class."""
 from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.util import slugify
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ class DailySensorEntity(RestoreEntity):
         """Initialize dailysensorentity."""
         self.coordinator = coordinator
         self.config_entry = config_entry
-        self.entity_id = f"sensor.{coordinator.name}"
+        self.entity_id = f"sensor.{slugify(coordinator.name)}"
 
     @property
     def should_poll(self):
