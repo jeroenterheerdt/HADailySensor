@@ -31,27 +31,29 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry):
         """Initialize HACS options flow."""
         self.config_entry = config_entry
-        self.options = dict(config_entry.options)
+        self.options = dict(config_entry.options) if config_entry.options else {}
         self._errors = {}
         # Get values with proper defaults to avoid None values causing type mismatches
+        # Use config_entry.data as fallback, with safety check for None
+        data = config_entry.data or {}
         self._operation = self.options.get(
-            CONF_OPERATION, config_entry.data.get(CONF_OPERATION, "")
+            CONF_OPERATION, data.get(CONF_OPERATION, "")
         )
         self._input_sensor = self.options.get(
-            CONF_INPUT_SENSOR, config_entry.data.get(CONF_INPUT_SENSOR, "")
+            CONF_INPUT_SENSOR, data.get(CONF_INPUT_SENSOR, "")
         )
         self._auto_reset = self.options.get(
-            CONF_AUTO_RESET, config_entry.data.get(CONF_AUTO_RESET, DEFAULT_AUTO_RESET)
+            CONF_AUTO_RESET, data.get(CONF_AUTO_RESET, DEFAULT_AUTO_RESET)
         )
         self._interval = self.options.get(
-            CONF_INTERVAL, config_entry.data.get(CONF_INTERVAL, DEFAULT_INTERVAL)
+            CONF_INTERVAL, data.get(CONF_INTERVAL, DEFAULT_INTERVAL)
         )
         self._unit_of_measurement = self.options.get(
-            CONF_UNIT_OF_MEASUREMENT, config_entry.data.get(CONF_UNIT_OF_MEASUREMENT, "")
+            CONF_UNIT_OF_MEASUREMENT, data.get(CONF_UNIT_OF_MEASUREMENT, "")
         )
         self._preserve_on_unavailable = self.options.get(
             CONF_PRESERVE_ON_UNAVAILABLE,
-            config_entry.data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE)
+            data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE)
         )
 
         # Ensure proper types for all fields
