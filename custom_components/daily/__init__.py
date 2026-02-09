@@ -17,9 +17,11 @@ from .const import (
     CONF_INTERVAL,
     CONF_NAME,
     CONF_OPERATION,
+    CONF_PRESERVE_ON_UNAVAILABLE,
     CONF_UNIT_OF_MEASUREMENT,
     COORDINATOR,
     DEFAULT_AUTO_RESET,
+    DEFAULT_PRESERVE_ON_UNAVAILABLE,
     DOMAIN,
     EVENT_RESET,
     EVENT_UPDATE,
@@ -58,6 +60,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     interval = entry.data.get(CONF_INTERVAL)
     unit_of_measurement = entry.data.get(CONF_UNIT_OF_MEASUREMENT)
     auto_reset = entry.data.get(CONF_AUTO_RESET, DEFAULT_AUTO_RESET)
+    preserve_on_unavailable = entry.data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE)
 
     # update listener for options flow
     hass_data = dict(entry.data)
@@ -97,6 +100,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         unit_of_measurement = hass.data[DOMAIN][entry.entry_id][
             CONF_UNIT_OF_MEASUREMENT
         ] = entry.options.get(CONF_UNIT_OF_MEASUREMENT)
+    if CONF_PRESERVE_ON_UNAVAILABLE in entry.options and entry.options.get(
+        CONF_PRESERVE_ON_UNAVAILABLE
+    ) != entry.data.get(CONF_PRESERVE_ON_UNAVAILABLE):
+        preserve_on_unavailable = hass.data[DOMAIN][entry.entry_id][CONF_PRESERVE_ON_UNAVAILABLE] = (
+            entry.options.get(CONF_PRESERVE_ON_UNAVAILABLE)
+        )
     # set up coordinator
     coordinator = DailySensorUpdateCoordinator(
         hass,
@@ -106,6 +115,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         interval=interval,
         unit_of_measurement=unit_of_measurement,
         auto_reset=auto_reset,
+        preserve_on_unavailable=preserve_on_unavailable,
     )
 
     await coordinator.async_refresh()
@@ -194,6 +204,15 @@ async def options_update_listener(hass, config_entry):
         if sensor_entity:
             sensor_entity.async_write_ha_state()
 
+    # Update preserve_on_unavailable if changed
+    new_preserve_on_unavailable = config_entry.options.get(CONF_PRESERVE_ON_UNAVAILABLE)
+    if new_preserve_on_unavailable is not None and new_preserve_on_unavailable != coordinator.preserve_on_unavailable:
+        _LOGGER.info("Changing preserve_on_unavailable from '%s' to '%s'.", coordinator.preserve_on_unavailable, new_preserve_on_unavailable)
+        coordinator.preserve_on_unavailable = new_preserve_on_unavailable
+        sensor_entity = coordinator.entities.get("sensor")
+        if sensor_entity:
+            sensor_entity.async_write_ha_state()
+
     await coordinator.async_request_refresh()
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
@@ -236,6 +255,7 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         interval,
         unit_of_measurement,
         auto_reset,
+        preserve_on_unavailable,
     ):
         """Initialize."""
         self.name = name
@@ -244,6 +264,7 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         self.interval = int(interval)
         self.unit_of_measurement = unit_of_measurement
         self.auto_reset = auto_reset
+        self.preserve_on_unavailable = preserve_on_unavailable
         self.hass = hass
         self.entities = {}
         self.platforms = []

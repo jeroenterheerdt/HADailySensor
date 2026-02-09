@@ -9,10 +9,12 @@ from .const import (  # pylint: disable=unused-import
     CONF_UNIT_OF_MEASUREMENT,
     CONF_INTERVAL,
     CONF_AUTO_RESET,
+    CONF_PRESERVE_ON_UNAVAILABLE,
     NAME,
     VALID_OPERATIONS,
     DEFAULT_INTERVAL,
     DEFAULT_AUTO_RESET,
+    DEFAULT_PRESERVE_ON_UNAVAILABLE,
 )
 from .exceptions import SensorNotFound, OperationNotFound, IntervalNotValid, NotUnique
 from .options_flow import DailySensorOptionsFlowHandler
@@ -104,6 +106,7 @@ class DailySensorConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_UNIT_OF_MEASUREMENT): str,
                     vol.Required(CONF_INTERVAL, default=DEFAULT_INTERVAL): int,
                     vol.Required(CONF_AUTO_RESET, default=DEFAULT_AUTO_RESET): bool,
+                    vol.Required(CONF_PRESERVE_ON_UNAVAILABLE, default=DEFAULT_PRESERVE_ON_UNAVAILABLE): bool,
                 }
             ),
             errors=self._errors,

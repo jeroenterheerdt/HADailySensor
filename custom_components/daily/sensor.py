@@ -100,16 +100,20 @@ class DailySensor(DailySensorEntity):
             
             # Check if the converted value is unavailable
             if the_val == STATE_UNAVAILABLE:
-                self._state = STATE_UNAVAILABLE
-                self.hass.add_job(self.async_write_ha_state)
+                # Only set state to unavailable if preserve_on_unavailable is False
+                if not self.coordinator.preserve_on_unavailable:
+                    self._state = STATE_UNAVAILABLE
+                    self.hass.add_job(self.async_write_ha_state)
                 return
                 
             if self._state not in (None, STATE_UNKNOWN, STATE_UNAVAILABLE):
                 self._state = convert_to_float(self._state)
                 # Check if the current state conversion failed
                 if self._state == STATE_UNAVAILABLE:
-                    self._state = STATE_UNAVAILABLE
-                    self.hass.add_job(self.async_write_ha_state)
+                    # Only set state to unavailable if preserve_on_unavailable is False
+                    if not self.coordinator.preserve_on_unavailable:
+                        self._state = STATE_UNAVAILABLE
+                        self.hass.add_job(self.async_write_ha_state)
                     return
                     
             # apply the operation and update self._state

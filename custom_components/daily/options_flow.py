@@ -10,10 +10,12 @@ from .const import (  # pylint: disable=unused-import
     CONF_UNIT_OF_MEASUREMENT,
     CONF_INTERVAL,
     CONF_AUTO_RESET,
+    CONF_PRESERVE_ON_UNAVAILABLE,
     NAME,
     VALID_OPERATIONS,
     DEFAULT_INTERVAL,
     DEFAULT_AUTO_RESET,
+    DEFAULT_PRESERVE_ON_UNAVAILABLE,
 )
 from .exceptions import SensorNotFound, OperationNotFound, IntervalNotValid
 
@@ -31,21 +33,34 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
         self.config_entry = config_entry
         self.options = dict(config_entry.options)
         self._errors = {}
+        # Get values with proper defaults to avoid None values causing type mismatches
         self._operation = self.options.get(
-            CONF_OPERATION, config_entry.data.get(CONF_OPERATION)
+            CONF_OPERATION, config_entry.data.get(CONF_OPERATION, "")
         )
         self._input_sensor = self.options.get(
-            CONF_INPUT_SENSOR, config_entry.data.get(CONF_INPUT_SENSOR)
+            CONF_INPUT_SENSOR, config_entry.data.get(CONF_INPUT_SENSOR, "")
         )
         self._auto_reset = self.options.get(
-            CONF_AUTO_RESET, config_entry.data.get(CONF_AUTO_RESET)
+            CONF_AUTO_RESET, config_entry.data.get(CONF_AUTO_RESET, DEFAULT_AUTO_RESET)
         )
         self._interval = self.options.get(
-            CONF_INTERVAL, config_entry.data.get(CONF_INTERVAL)
+            CONF_INTERVAL, config_entry.data.get(CONF_INTERVAL, DEFAULT_INTERVAL)
         )
         self._unit_of_measurement = self.options.get(
-            CONF_UNIT_OF_MEASUREMENT, config_entry.data.get(CONF_UNIT_OF_MEASUREMENT)
+            CONF_UNIT_OF_MEASUREMENT, config_entry.data.get(CONF_UNIT_OF_MEASUREMENT, "")
         )
+        self._preserve_on_unavailable = self.options.get(
+            CONF_PRESERVE_ON_UNAVAILABLE,
+            config_entry.data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE)
+        )
+
+        # Ensure proper types for all fields
+        if self._auto_reset is None:
+            self._auto_reset = DEFAULT_AUTO_RESET
+        if self._interval is None:
+            self._interval = DEFAULT_INTERVAL
+        if self._preserve_on_unavailable is None:
+            self._preserve_on_unavailable = DEFAULT_PRESERVE_ON_UNAVAILABLE
 
     async def async_step_init(self, user_input=None):  # pylint: disable=unused-argument
         """Manage the options."""
@@ -72,6 +87,7 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
                 self._unit_of_measurement = user_input[CONF_UNIT_OF_MEASUREMENT]
                 self._operation = user_input[CONF_OPERATION]
                 self._input_sensor = user_input[CONF_INPUT_SENSOR]
+                self._preserve_on_unavailable = user_input[CONF_PRESERVE_ON_UNAVAILABLE]
 
                 return self.async_create_entry(title="", data=user_input)
             except SensorNotFound:
@@ -112,6 +128,7 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
                     ): str,
                     vol.Required(CONF_INTERVAL, default=self._interval): int,
                     vol.Required(CONF_AUTO_RESET, default=self._auto_reset): bool,
+                    vol.Required(CONF_PRESERVE_ON_UNAVAILABLE, default=self._preserve_on_unavailable): bool,
                 }
             ),
             errors=self._errors,

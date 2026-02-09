@@ -25,6 +25,7 @@ CONF_NAME = "name"
 CONF_INTERVAL = "interval"
 CONF_UNIT_OF_MEASUREMENT = "unit_of_measurement"
 CONF_AUTO_RESET = "auto_reset"
+CONF_PRESERVE_ON_UNAVAILABLE = "preserve_on_unavailable"
 
 # Attributes
 ATTR_DATETIME_OF_OCCURRENCE = "datetime_of_occurrence"
@@ -50,6 +51,7 @@ VALID_OPERATIONS = [
 # Defaults
 DEFAULT_INTERVAL = 1800.0  # seconds
 DEFAULT_AUTO_RESET = True
+DEFAULT_PRESERVE_ON_UNAVAILABLE = False
 # Services
 SERVICE_RESET = "reset"
 SERVICE_UPDATE = "update"
