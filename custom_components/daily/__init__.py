@@ -47,11 +47,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
     if entry.entry_id in hass.data[DOMAIN]:
-        _LOGGER.warning(f"Sensor '{entry.title}' already set up. Updating config dynamically.")
-        existing_data = hass.data[DOMAIN][entry.entry_id]
-        existing_entity = existing_data.get("entity")
-        if existing_entity:
-            await existing_entity.async_update_config(entry.data)
+        _LOGGER.warning(f"Sensor '{entry.title}' already set up. Skipping duplicate setup.")
         return True
     name = entry.data.get(CONF_NAME)
     name_no_spaces_but_underscores = name.replace(" ", "_")

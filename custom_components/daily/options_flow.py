@@ -1,4 +1,3 @@
-from homeassistant.helpers.selector import selector
 import logging
 import voluptuous as vol
 from homeassistant import config_entries
@@ -26,10 +25,9 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
     """Daily Sensor options flow options handler."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self, config_entry):
-        """Initialize HACS options flow."""
+        """Initialize Daily Sensor options flow."""
         # Note: config_entry is already set by parent class OptionsFlow
         self.options = dict(config_entry.options) if config_entry.options else {}
         self._errors = {}

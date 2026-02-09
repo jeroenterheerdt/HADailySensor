@@ -1,6 +1,6 @@
 """Sensor platform for Daily Sensor."""
 
-import asyncio
+import contextlib
 from datetime import datetime
 import logging
 from statistics import StatisticsError, median, stdev, variance
@@ -29,10 +29,7 @@ from .const import (  # pylint: disable=unused-import
     ICON,
 )
 from .entity import DailySensorEntity
-
-# from homeassistant.helpers import entity_registry as er
 from .helpers import parse_sensor_state, convert_to_float
-import contextlib
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -30,7 +30,6 @@ class DailySensorConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Daily Sensor."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self):
         """Initialize."""
@@ -114,7 +113,7 @@ class DailySensorConfigFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Get options flow."""
         return DailySensorOptionsFlowHandler(config_entry)
 
-    async def _check_unique(self, thename):
+    async def _check_unique(self, name):
         """Test if the specified name is not already claimed."""
-        await self.async_set_unique_id(thename)
+        await self.async_set_unique_id(name)
         self._abort_if_unique_id_configured()
