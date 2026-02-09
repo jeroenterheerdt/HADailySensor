@@ -157,9 +157,7 @@ class DailySensor(DailySensorEntity):
         else:
             # sensor is unknown at startup, state which comes after is considered as initial state
             _LOGGER.debug(
-                "Initial state for {} is {}".format(
-                    self.coordinator.input_sensor, input_state
-                )
+                f"Initial state for {self.coordinator.input_sensor} is {input_state}"
             )
             return
 

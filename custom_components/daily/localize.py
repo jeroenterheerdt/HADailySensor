@@ -36,7 +36,7 @@ def localize(string, language):
             return string
     except OSError:
         _LOGGER.error(
-            "Couldn't load translations language file for {}".format(language)
+            f"Couldn't load translations language file for {language}"
         )
 
 

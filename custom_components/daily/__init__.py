@@ -127,10 +127,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-    # add update listener if not already added.
-    # if weakref.ref(async_reload_entry) not in entry.update_listeners:
-    #    entry.add_update_listener(async_reload_entry)
-
     # register services
     hass.services.async_register(
         DOMAIN,
@@ -274,7 +270,7 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         super().__init__(hass, _LOGGER, name=name, update_interval=SCAN_INTERVAL)
 
         # reset happens at midnight
-        _LOGGER.info("auto_reset: {0}".format(self.auto_reset))
+        _LOGGER.info(f"auto_reset: {self.auto_reset}")
         if self.auto_reset:
             async_track_time_change(
                 hass,
@@ -283,12 +279,12 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
                 minute=0,
                 second=0,
             )
-            _LOGGER.info("registered for time change.")
+            _LOGGER.info("Registered for time change at midnight.")
         self.entry_setup_completed = True
 
-    def register_entity(self, thetype, entity):
+    def register_entity(self, entity_type, entity):
         """Register an entity."""
-        self.entities[thetype] = entity
+        self.entities[entity_type] = entity
 
     def fire_event(self, event):
         """Fire an event."""
@@ -296,7 +292,7 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         self.hass.bus.fire(event_to_fire)
 
     def handle_reset(self, call):
-        """Hande the reset service call."""
+        """Handle the reset service call."""
         self.fire_event(EVENT_RESET)
 
     def handle_update(self, call):
@@ -304,11 +300,11 @@ class DailySensorUpdateCoordinator(DataUpdateCoordinator):
         self.fire_event(EVENT_UPDATE)
 
     async def _async_reset(self, *args):
-        _LOGGER.info("Resetting daily sensor {}!".format(self.name))
+        _LOGGER.info(f"Resetting daily sensor {self.name}")
         self.fire_event(EVENT_RESET)
 
     async def _async_update_data(self):
         """Update data."""
-        _LOGGER.info("Updating Daily Sensor {}".format(self.name))
+        _LOGGER.info(f"Updating Daily Sensor {self.name}")
         # fire an event so the sensor can update itself.
         self.fire_event(EVENT_UPDATE)

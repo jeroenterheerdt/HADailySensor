@@ -18,13 +18,18 @@ Aggregation is configurable - available options are: minimum, maximum, sum, aver
 
 ## Configuration
 Install the custom component (preferably using HACS) and then use the Configuration --> Integrations pane to search for 'Daily Sensor'. You will need to specify the following:
-- Name of the daily sensor. This name needs to be unique in your Home Assistant installation.
-- Name of the input sensor - this is the sensor that the daily sensor will aggregate during the day.
-- The aggregation to run on the input sensor - you can choose min, max, sum, mean, median, stdev and variation.
-- The interval in seconds in which to update this sensor.
-- Automatic reset at midnight ? By default selected, but can be deselected to allow manual reset
+- **Name** - Unique name for this daily sensor instance
+- **Input Sensor** - The source sensor to aggregate data from
+- **Operation** - Aggregation method: `min`, `max`, `sum`, `mean`, `median`, `stdev`, or `variance`
+- **Unit of Measurement** - Display unit for the sensor value
+- **Interval** - Update frequency in seconds (default: 1800)
+- **Auto Reset** - Automatically reset at midnight (default: enabled)
+- **Preserve on Unavailable** - Keep last value when source sensor becomes unavailable (default: disabled)
+  - When enabled, the daily sensor retains its current value if the input sensor becomes unavailable (e.g., during Home Assistant restart)
+  - When disabled (default), the daily sensor becomes unavailable when the input sensor is unavailable
+  - Useful for maintaining accurate daily statistics across HA restarts
 
-That's all. You can add the component multiple times to aggregate other sensors. All sensors will be reset at 00:00 local time (unless disabled) and can be reset manually by calling the `reset` service for each instance of the component.
+All sensors will be reset at 00:00 local time (unless auto-reset is disabled) and can be reset manually by calling the `daily.reset` service for each instance.
 
 ## Use case
 This component is most frequently used to create a minimum and maximum daily temperature sensor based on a temperature sensor that is provided by a weather station, but can be used for many different things.

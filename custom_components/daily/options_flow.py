@@ -115,21 +115,17 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
                 return self.async_create_entry(title="", data=user_input)
             except SensorNotFound:
                 _LOGGER.error(
-                    "Input sensor {} not found.".format(user_input[CONF_INPUT_SENSOR])
+                    f"Input sensor {user_input[CONF_INPUT_SENSOR]} not found."
                 )
                 self._errors["base"] = "sensornotfound"
             except OperationNotFound:
                 _LOGGER.error(
-                    "Specified operation {} not valid.".format(
-                        user_input[CONF_OPERATION]
-                    ),
+                    f"Specified operation {user_input[CONF_OPERATION]} not valid."
                 )
                 self._errors["base"] = "operationnotfound"
             except IntervalNotValid:
                 _LOGGER.error(
-                    "Specified interval {} not valid.".format(
-                        user_input[CONF_INTERVAL]
-                    ),
+                    f"Specified interval {user_input[CONF_INTERVAL]} not valid."
                 )
                 self._errors["base"] = "intervalnotvalid"
 
