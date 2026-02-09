@@ -30,7 +30,7 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
 
     def __init__(self, config_entry):
         """Initialize HACS options flow."""
-        self.config_entry = config_entry
+        # Note: config_entry is already set by parent class OptionsFlow
         self.options = dict(config_entry.options) if config_entry.options else {}
         self._errors = {}
         # Get values with proper defaults to avoid None values causing type mismatches
