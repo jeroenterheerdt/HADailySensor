@@ -46,7 +46,7 @@ class DailySensor(DailySensorEntity):
 
     def __init__(self, hass, coordinator, entity):
         """Init for DailySensor."""
-        super(DailySensor, self).__init__(coordinator, entity)
+        super().__init__(coordinator, entity)
         self._state = None
         self._values = []
         self._occurrence = None
@@ -58,20 +58,11 @@ class DailySensor(DailySensorEntity):
         self.coordinator.register_entity(self.name, self.entity_id)
 
         # listen to the update event and reset event
-        event_to_listen = f"{self.coordinator.name}_{EVENT_RESET}"
-        self.hass.bus.async_listen(
-            event_to_listen,
-            lambda event: self._handle_reset(  # pylint: disable=unnecessary-lambda
-                event
-            ),
-        )
-        event_to_listen_2 = f"{self.coordinator.name}_{EVENT_UPDATE}"
-        self.hass.bus.async_listen(
-            event_to_listen_2,
-            lambda event: self._handle_update(  # pylint: disable=unnecessary-lambda
-                event
-            ),
-        )
+        reset_event = f"{self.coordinator.name}_{EVENT_RESET}"
+        self.hass.bus.async_listen(reset_event, self._handle_reset)
+
+        update_event = f"{self.coordinator.name}_{EVENT_UPDATE}"
+        self.hass.bus.async_listen(update_event, self._handle_update)
 
         state = await self.async_get_last_state()
         self._state = parse_sensor_state(state)

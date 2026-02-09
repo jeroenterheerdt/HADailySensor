@@ -50,7 +50,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.warning(f"Sensor '{entry.title}' already set up. Skipping duplicate setup.")
         return True
     name = entry.data.get(CONF_NAME)
-    name_no_spaces_but_underscores = name.replace(" ", "_")
+    sanitized_name = name.replace(" ", "_")
     input_sensor = entry.data.get(CONF_INPUT_SENSOR)
     operation = entry.data.get(CONF_OPERATION)
     interval = entry.data.get(CONF_INTERVAL)
@@ -126,12 +126,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     # register services
     hass.services.async_register(
         DOMAIN,
-        f"{name_no_spaces_but_underscores}_{SERVICE_RESET}",
+        f"{sanitized_name}_{SERVICE_RESET}",
         coordinator.handle_reset,
     )
     hass.services.async_register(
         DOMAIN,
-        f"{name_no_spaces_but_underscores}_{SERVICE_UPDATE}",
+        f"{sanitized_name}_{SERVICE_UPDATE}",
         coordinator.handle_update,
     )
     return True
@@ -230,7 +230,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
 async def async_remove_entry(hass, entry):
     """Remove Daily sensor config entry."""
     if DOMAIN in hass.data and entry.entry_id in hass.data[DOMAIN]:
-        coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+        coordinator = hass.data[DOMAIN][entry.entry_id][COORDINATOR]
         await coordinator.async_delete_config()
         del hass.data[DOMAIN][entry.entry_id]
 
