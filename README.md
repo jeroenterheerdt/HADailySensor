@@ -13,8 +13,8 @@
 # HADailySensor
 ![](logo.png?raw=true)
 
-Daily Sensor custom component for Home Assistant. It takes aggregates an input sensor until midnight. Then it resets.
-Aggregation is configurable - available options are: minimum, maximum, sum, average (mean), median, standard deviation and variation.
+Daily Sensor is a Home Assistant custom component that accumulates readings from a chosen sensor throughout the day and resets at midnight.
+You can select how values are aggregated: minimum, maximum, sum, average (mean), median, standard deviation, or variation. It’s a simple way to produce clear daily summaries from any numeric sensor.
 
 ## Configuration
 Install the custom component (preferably using HACS) and then use the Configuration --> Integrations pane to search for 'Daily Sensor'. You will need to specify the following:
