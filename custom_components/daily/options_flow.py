@@ -59,10 +59,18 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
         # Ensure proper types for all fields
         if self._auto_reset is None:
             self._auto_reset = DEFAULT_AUTO_RESET
+        if not isinstance(self._auto_reset, bool):
+            self._auto_reset = bool(self._auto_reset)
+
         if self._interval is None:
-            self._interval = DEFAULT_INTERVAL
+            self._interval = int(DEFAULT_INTERVAL)
+        if not isinstance(self._interval, int):
+            self._interval = int(self._interval)
+
         if self._preserve_on_unavailable is None:
             self._preserve_on_unavailable = DEFAULT_PRESERVE_ON_UNAVAILABLE
+        if not isinstance(self._preserve_on_unavailable, bool):
+            self._preserve_on_unavailable = bool(self._preserve_on_unavailable)
 
     async def async_step_init(self, user_input=None):  # pylint: disable=unused-argument
         """Manage the options."""
