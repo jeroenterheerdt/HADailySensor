@@ -72,6 +72,10 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
         if not isinstance(self._preserve_on_unavailable, bool):
             self._preserve_on_unavailable = bool(self._preserve_on_unavailable)
 
+        # Ensure operation is valid (required for vol.In validation)
+        if not self._operation or self._operation not in VALID_OPERATIONS:
+            self._operation = VALID_OPERATIONS[0]  # Default to first operation (max)
+
     async def async_step_init(self, user_input=None):  # pylint: disable=unused-argument
         """Manage the options."""
         self._errors = {}
