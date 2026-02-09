@@ -56,21 +56,30 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
             data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE)
         )
 
-        # Ensure proper types for all fields
-        if self._auto_reset is None:
+        # Ensure proper types for all fields with error handling
+        try:
+            if self._auto_reset is None:
+                self._auto_reset = DEFAULT_AUTO_RESET
+            if not isinstance(self._auto_reset, bool):
+                self._auto_reset = bool(self._auto_reset)
+        except (ValueError, TypeError):
             self._auto_reset = DEFAULT_AUTO_RESET
-        if not isinstance(self._auto_reset, bool):
-            self._auto_reset = bool(self._auto_reset)
 
-        if self._interval is None:
+        try:
+            if self._interval is None:
+                self._interval = int(DEFAULT_INTERVAL)
+            if not isinstance(self._interval, int):
+                self._interval = int(self._interval)
+        except (ValueError, TypeError):
             self._interval = int(DEFAULT_INTERVAL)
-        if not isinstance(self._interval, int):
-            self._interval = int(self._interval)
 
-        if self._preserve_on_unavailable is None:
+        try:
+            if self._preserve_on_unavailable is None:
+                self._preserve_on_unavailable = DEFAULT_PRESERVE_ON_UNAVAILABLE
+            if not isinstance(self._preserve_on_unavailable, bool):
+                self._preserve_on_unavailable = bool(self._preserve_on_unavailable)
+        except (ValueError, TypeError):
             self._preserve_on_unavailable = DEFAULT_PRESERVE_ON_UNAVAILABLE
-        if not isinstance(self._preserve_on_unavailable, bool):
-            self._preserve_on_unavailable = bool(self._preserve_on_unavailable)
 
         # Ensure operation is valid (required for vol.In validation)
         if not self._operation or self._operation not in VALID_OPERATIONS:
