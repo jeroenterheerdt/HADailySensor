@@ -1,4 +1,5 @@
 """Daily Sensor class."""
+
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.util import slugify
 import logging

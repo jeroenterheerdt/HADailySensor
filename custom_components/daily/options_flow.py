@@ -2,15 +2,12 @@ import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from .const import (  # pylint: disable=unused-import
-    DOMAIN,
     CONF_INPUT_SENSOR,
     CONF_OPERATION,
-    CONF_NAME,
     CONF_UNIT_OF_MEASUREMENT,
     CONF_INTERVAL,
     CONF_AUTO_RESET,
     CONF_PRESERVE_ON_UNAVAILABLE,
-    NAME,
     VALID_OPERATIONS,
     DEFAULT_INTERVAL,
     DEFAULT_AUTO_RESET,
@@ -34,9 +31,7 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
         # Get values with proper defaults to avoid None values causing type mismatches
         # Use config_entry.data as fallback, with safety check for None
         data = config_entry.data or {}
-        self._operation = self.options.get(
-            CONF_OPERATION, data.get(CONF_OPERATION, "")
-        )
+        self._operation = self.options.get(CONF_OPERATION, data.get(CONF_OPERATION, ""))
         self._input_sensor = self.options.get(
             CONF_INPUT_SENSOR, data.get(CONF_INPUT_SENSOR, "")
         )
@@ -51,7 +46,7 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
         )
         self._preserve_on_unavailable = self.options.get(
             CONF_PRESERVE_ON_UNAVAILABLE,
-            data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE)
+            data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE),
         )
 
         # Ensure proper types for all fields with error handling
@@ -145,7 +140,10 @@ class DailySensorOptionsFlowHandler(config_entries.OptionsFlow):
                     ): str,
                     vol.Required(CONF_INTERVAL, default=self._interval): int,
                     vol.Required(CONF_AUTO_RESET, default=self._auto_reset): bool,
-                    vol.Required(CONF_PRESERVE_ON_UNAVAILABLE, default=self._preserve_on_unavailable): bool,
+                    vol.Required(
+                        CONF_PRESERVE_ON_UNAVAILABLE,
+                        default=self._preserve_on_unavailable,
+                    ): bool,
                 }
             ),
             errors=self._errors,

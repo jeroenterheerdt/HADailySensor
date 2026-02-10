@@ -85,7 +85,7 @@ class DailySensor(DailySensorEntity):
         if input_state not in (None, STATE_UNKNOWN, STATE_UNAVAILABLE):
             input_state = parse_sensor_state(input_state)
             the_val = convert_to_float(input_state)
-            
+
             # Check if the converted value is unavailable
             if the_val == STATE_UNAVAILABLE:
                 # Only set state to unavailable if preserve_on_unavailable is False
@@ -93,7 +93,7 @@ class DailySensor(DailySensorEntity):
                     self._state = STATE_UNAVAILABLE
                     self.hass.add_job(self.async_write_ha_state)
                 return
-                
+
             if self._state not in (None, STATE_UNKNOWN, STATE_UNAVAILABLE):
                 self._state = convert_to_float(self._state)
                 # Check if the current state conversion failed
@@ -103,7 +103,7 @@ class DailySensor(DailySensorEntity):
                         self._state = STATE_UNAVAILABLE
                         self.hass.add_job(self.async_write_ha_state)
                     return
-                    
+
             # apply the operation and update self._state
             if self.coordinator.operation == CONF_SUM:
                 if self._state in (None, STATE_UNKNOWN, STATE_UNAVAILABLE):
@@ -126,9 +126,7 @@ class DailySensor(DailySensorEntity):
                     state_minmax_changed = True
             elif self.coordinator.operation == CONF_MEAN:
                 self._values.append(the_val)
-                self._state = round(
-                    (sum(self._values) * 1.0) / len(self._values), 1
-                )
+                self._state = round((sum(self._values) * 1.0) / len(self._values), 1)
             elif self.coordinator.operation == CONF_MEDIAN:
                 self._values.append(the_val)
                 self._state = median(self._values)

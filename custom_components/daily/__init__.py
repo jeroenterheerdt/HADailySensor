@@ -47,7 +47,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info(STARTUP_MESSAGE)
     if entry.entry_id in hass.data[DOMAIN]:
-        _LOGGER.warning(f"Sensor '{entry.title}' already set up. Skipping duplicate setup.")
+        _LOGGER.warning(
+            f"Sensor '{entry.title}' already set up. Skipping duplicate setup."
+        )
         return True
     name = entry.data.get(CONF_NAME)
     sanitized_name = name.replace(" ", "_")
@@ -56,7 +58,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     interval = entry.data.get(CONF_INTERVAL)
     unit_of_measurement = entry.data.get(CONF_UNIT_OF_MEASUREMENT)
     auto_reset = entry.data.get(CONF_AUTO_RESET, DEFAULT_AUTO_RESET)
-    preserve_on_unavailable = entry.data.get(CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE)
+    preserve_on_unavailable = entry.data.get(
+        CONF_PRESERVE_ON_UNAVAILABLE, DEFAULT_PRESERVE_ON_UNAVAILABLE
+    )
 
     # update listener for options flow
     hass_data = dict(entry.data)
@@ -99,9 +103,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     if CONF_PRESERVE_ON_UNAVAILABLE in entry.options and entry.options.get(
         CONF_PRESERVE_ON_UNAVAILABLE
     ) != entry.data.get(CONF_PRESERVE_ON_UNAVAILABLE):
-        preserve_on_unavailable = hass.data[DOMAIN][entry.entry_id][CONF_PRESERVE_ON_UNAVAILABLE] = (
-            entry.options.get(CONF_PRESERVE_ON_UNAVAILABLE)
-        )
+        preserve_on_unavailable = hass.data[DOMAIN][entry.entry_id][
+            CONF_PRESERVE_ON_UNAVAILABLE
+        ] = entry.options.get(CONF_PRESERVE_ON_UNAVAILABLE)
     # set up coordinator
     coordinator = DailySensorUpdateCoordinator(
         hass,
@@ -163,7 +167,11 @@ async def options_update_listener(hass, config_entry):
     # Update input sensor if changed
     new_input = config_entry.options.get(CONF_INPUT_SENSOR)
     if new_input and new_input != coordinator.input_sensor:
-        _LOGGER.info("Changing input sensor from '%s' to '%s'.", coordinator.input_sensor, new_input)
+        _LOGGER.info(
+            "Changing input sensor from '%s' to '%s'.",
+            coordinator.input_sensor,
+            new_input,
+        )
         coordinator.input_sensor = new_input
         sensor_entity = coordinator.entities.get("sensor")
         if sensor_entity:
@@ -172,7 +180,11 @@ async def options_update_listener(hass, config_entry):
     # Update auto_reset if changed
     new_auto_reset = config_entry.options.get(CONF_AUTO_RESET)
     if new_auto_reset is not None and new_auto_reset != coordinator.auto_reset:
-        _LOGGER.info("Changing auto_reset from '%s' to '%s'.", coordinator.auto_reset, new_auto_reset)
+        _LOGGER.info(
+            "Changing auto_reset from '%s' to '%s'.",
+            coordinator.auto_reset,
+            new_auto_reset,
+        )
         coordinator.auto_reset = new_auto_reset
         sensor_entity = coordinator.entities.get("sensor")
         if sensor_entity:
@@ -181,7 +193,11 @@ async def options_update_listener(hass, config_entry):
     # Update operation if changed
     new_operation = config_entry.options.get(CONF_OPERATION)
     if new_operation and new_operation != coordinator.operation:
-        _LOGGER.info("Changing operation from '%s' to '%s'.", coordinator.operation, new_operation)
+        _LOGGER.info(
+            "Changing operation from '%s' to '%s'.",
+            coordinator.operation,
+            new_operation,
+        )
         coordinator.operation = new_operation
         sensor_entity = coordinator.entities.get("sensor")
         if sensor_entity:
@@ -190,7 +206,11 @@ async def options_update_listener(hass, config_entry):
     # Update unit_of_measurement if changed
     new_uom = config_entry.options.get(CONF_UNIT_OF_MEASUREMENT)
     if new_uom and new_uom != coordinator.unit_of_measurement:
-        _LOGGER.info("Changing unit_of_measurement from '%s' to '%s'.", coordinator.unit_of_measurement, new_uom)
+        _LOGGER.info(
+            "Changing unit_of_measurement from '%s' to '%s'.",
+            coordinator.unit_of_measurement,
+            new_uom,
+        )
         coordinator.unit_of_measurement = new_uom
         sensor_entity = coordinator.entities.get("sensor")
         if sensor_entity:
@@ -198,14 +218,22 @@ async def options_update_listener(hass, config_entry):
 
     # Update preserve_on_unavailable if changed
     new_preserve_on_unavailable = config_entry.options.get(CONF_PRESERVE_ON_UNAVAILABLE)
-    if new_preserve_on_unavailable is not None and new_preserve_on_unavailable != coordinator.preserve_on_unavailable:
-        _LOGGER.info("Changing preserve_on_unavailable from '%s' to '%s'.", coordinator.preserve_on_unavailable, new_preserve_on_unavailable)
+    if (
+        new_preserve_on_unavailable is not None
+        and new_preserve_on_unavailable != coordinator.preserve_on_unavailable
+    ):
+        _LOGGER.info(
+            "Changing preserve_on_unavailable from '%s' to '%s'.",
+            coordinator.preserve_on_unavailable,
+            new_preserve_on_unavailable,
+        )
         coordinator.preserve_on_unavailable = new_preserve_on_unavailable
         sensor_entity = coordinator.entities.get("sensor")
         if sensor_entity:
             sensor_entity.async_write_ha_state()
 
     await coordinator.async_request_refresh()
+
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Handle removal of an entry."""
